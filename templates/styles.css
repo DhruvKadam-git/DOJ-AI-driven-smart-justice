@@ -1,0 +1,106 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa; /* Light cyan background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 480px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    border: 2px solid #00bcd4; /* Teal border */
+}
+
+header {
+    background-color: #00bcd4; /* Teal header */
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #00acc1; /* Darker teal border */
+}
+
+header h1 {
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 1em;
+    margin-top: 0;
+}
+
+.chatbox {
+    height: 300px;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f1f8e9; /* Light green background */
+    border-bottom: 2px solid #dce775; /* Light green border */
+}
+
+.input-container {
+    display: flex;
+    border-top: 2px solid #00bcd4; /* Teal border */
+    background-color: #ffffff;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    font-size: 1em;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    border-radius: 25px; /* Rounded corners for input */
+}
+
+button {
+    background-color: #ff4081; /* Pink button */
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    border-radius: 25px; /* Rounded corners for button */
+    margin: 10px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #f50057; /* Darker pink on hover */
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 80%;
+}
+
+.user-message {
+    background-color: #b2dfdb; /* Light teal */
+    align-self: flex-end;
+    text-align: right;
+}
+
+.bot-message {
+    background-color: #ffccbc; /* Light peach */
+    align-self: flex-start;
+    text-align: left;
+}

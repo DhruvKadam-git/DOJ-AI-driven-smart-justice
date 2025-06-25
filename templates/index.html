@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoJ - Justice at Your Fingertips</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/0d3c9556da.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Professional gradient animations */
+        .hero-gradient {
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 50%, #1a365d 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        /* Main background gradient */
+        body {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        /* Section gradients with sophisticated animations */
+        .section-gradient-dark {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #1a202c 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        .section-gradient-light {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 50%, #2d3748 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 25s ease infinite;
+        }
+
+        /* Card gradients with enhanced hover effects */
+        .card-gradient {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .card-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .card-gradient.fade {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Glass morphism effect with enhanced depth */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Enhanced chat button with professional animation */
+        #chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 40px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            z-index: 1000;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #chat-button i {
+            font-size: 1.2rem;
+        }
+
+        #chat-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+        }
+
+        #chat-popup {
+            position: fixed;
+            bottom: 100px;
+            right: 60px;
+            width: 380px;
+            max-width: calc(100vw - 100px);
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        #chat-popup.hidden {
+            display: none;
+        }
+
+        #chat-popup:not(.hidden) {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #messages {
+            padding: 20px;
+            height: 320px;
+            max-height: 320px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+            margin-bottom: 70px;
+        }
+
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        #chat-form {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            height: 65px;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            outline: none;
+            font-size: 0.95rem;
+            margin-right: 5px;
+        }
+
+        #message-input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            margin-bottom: 25px;
+            padding: 12px 16px;
+            border-radius: 15px;
+            max-width: 80%;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        #close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 5px;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        #close-button:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Send Button */
+        #chat-form button[type="submit"] {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chat-form button[type="submit"]:hover {
+            background: linear-gradient(135deg, #2b6cb0 0%, #2c5282 100%);
+            transform: translateY(-1px);
+        }
+
+        /* Voice Button */
+        #voice-button {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #voice-button:hover {
+            background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+            transform: translateY(-1px);
+        }
+
+        /* Timestamp for messages */
+        .message::after {
+            content: attr(data-time);
+            position: absolute;
+            bottom: -20px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .message.user::after {
+            right: 5px;
+        }
+
+        .message.bot::after {
+            left: 5px;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Professional input field styling */
+        input, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3182ce;
+            box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+            outline: none;
+        }
+
+        /* Professional button styling */
+        .btn-primary {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: 0.5s;
+            opacity: 0;
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translateX(100%);
+        }
+
+        /* Secondary Button */
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(74, 85, 104, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(74, 85, 104, 0.4);
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+        }
+
+        /* Outline Button */
+        .btn-outline {
+            background: transparent;
+            color: #3182ce;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            border: 2px solid #3182ce;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-outline:hover {
+            background: rgba(49, 130, 206, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.2);
+        }
+
+        /* Action Button (e.g., for CTAs) */
+        .btn-action {
+            background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(237, 100, 166, 0.3);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(237, 100, 166, 0.4);
+            background: linear-gradient(135deg, #d53f8c 0%, #b83280 100%);
+        }
+
+        /* Icon Button */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-icon:hover i {
+            transform: translateX(4px);
+        }
+
+        /* Floating Action Button */
+        .btn-floating {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+            z-index: 50;
+        }
+
+        .btn-floating:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+        }
+
+        /* Disabled Button State */
+        .btn-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Loading State */
+        .btn-loading {
+            position: relative;
+            color: transparent !important;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 1rem;
+            height: 1rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Professional navigation styling */
+        nav a {
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: #3182ce;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Enhanced service icons with professional animation */
+        .service-icon {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            border-radius: 50%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-gradient:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 12px rgba(49, 130, 206, 0.3);
+        }
+
+        /* Professional animations */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Professional section transitions */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* Enhanced typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        /* Professional card layout */
+        .service-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            padding: 2rem;
+            padding-bottom: 100px;
+        }
+
+        .service-card p {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .service-card h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card .btn-stream {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: auto;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
+            white-space: nowrap;
+            z-index: 2;
+        }
+
+        .service-card .btn-stream:hover {
+            transform: translateX(-50%) translateY(-2px);
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4);
+        }
+
+        .service-card .service-icon {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Enhanced footer styling */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Professional hover effects for links */
+        .hover-effect {
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            color: #3182ce;
+            transform: translateY(-1px);
+        }
+
+        /* Professional table styling */
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Professional list styling */
+        ul.styled-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        ul.styled-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #3182ce;
+        }
+
+        /* Professional blockquote styling */
+        blockquote {
+            border-left: 4px solid #3182ce;
+            padding-left: 1rem;
+            margin-left: 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Professional code block styling */
+        pre {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            color: #3182ce;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            #chat-popup {
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: calc(100vw - 20px);
+                bottom: 90px;
+            }
+
+            #messages {
+                height: 300px;
+                margin-bottom: 65px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            #chat-form {
+                padding: 12px 15px;
+            }
+        }
+
+        /* Ensure buttons don't get cut */
+        #chat-form button[type="submit"],
+        #voice-button {
+            min-width: 40px;
+            height: 40px;
+            padding: 8px 12px;
+            flex-shrink: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .service-card {
+                padding-bottom: 90px;
+            }
+            
+            .service-card p {
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        /* Enhanced Social Media Icons Styling */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem; /* Consistent spacing between icons */
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+        }
+
+        /* Add specific hover colors for each social icon */
+        .social-icon.facebook:hover {
+            background: #3b5998; /* Facebook color */
+        }
+
+        .social-icon.twitter:hover {
+            background: #1DA1F2; /* Twitter color */
+        }
+
+        .social-icon.linkedin:hover {
+            background: #0077B5; /* LinkedIn color */
+        }
+
+        .social-icon.instagram:hover {
+            background: #C13584; /* Instagram color */
+        }
+
+        .social-icon.youtube:hover {
+            background: #FF0000; /* YouTube color */
+        }
+
+        .social-icon i {
+            font-size: 1.2rem;
+        }
+
+        /* Enhanced Get in Touch Icons and Layout */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .contact-icon i {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .contact-text {
+            color: #e2e8f0;
+            font-size: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .contact-info {
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .contact-item {
+                flex: 0 1 auto;
+                min-width: 250px;
+            }
+        }
+
+        /* Add this CSS for the scale-up animation */
+        .scale-up {
+            opacity: 0;
+            transform: scale(0.8); /* Start smaller */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .scale-up.visible {
+            opacity: 1;
+            transform: scale(1); /* Scale to original size */
+        }
+
+        /* Enhanced Gradient Button Style */
+        .gradient-button {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.3);
+            border: none;
+            display: inline-block; /* Ensure it behaves like a block element */
+        }
+
+        .gradient-button:hover {
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+        }
+
+        /* Shine Effect */
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 50%);
+            transform: translate(-50%, -50%) rotate(30deg);
+            animation: shine 1.5s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translate(-200%, -200%) rotate(30deg);
+            }
+            100% {
+                transform: translate(200%, 200%) rotate(30deg);
+            }
+        }
+
+        /* Animated Button */
+        .animated-button {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .animated-button:hover {
+            transform: scale(1.05); /* Scale up on hover */
+            box-shadow: 0 8px 25px rgba(49, 130, 206, 0.5); /* Enhanced shadow on hover */
+        }
+
+        /* Add this to your existing CSS */
+        #chat-popup {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        #chat-popup.hidden {
+            display: none;
+        }
+
+        #chat-popup:not(.hidden) {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Header Section -->
+    <header class="bg-gray-800 py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="https://freesvg.org/img/indian-emblem.png" alt="DoJ Logo" class="h-10 w-10 mr-2">
+                <span class="text-xl font-semibold">Department of Justice</span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-300 hover:text-white">Home</a>
+                <a href="#about" class="text-gray-300 hover:text-white">About</a>
+                <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+                <a href="#contact" class="text-gray-300 hover:text-white">Contact</a>
+            </nav>
+
+            <!-- Dark Mode Toggle (Optional) -->
+            <!-- <div class="flex items-center space-x-4">
+                <button class="text-gray-300 hover:text-white">
+                    <i class="fas fa-moon"></i> Dark mode icon -->
+                <!-- </button> -->
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-300 hover:text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden bg-gray-800">
+            <nav class="flex flex-col space-y-2 py-2 px-4">
+                <a href="#home" class="text-gray-300 hover:text-white">Home</a>
+                <a href="#about" class="text-gray-300 hover:text-white">About</a>
+                <a href="#services" class="text-gray-300 hover:text-white">Services</a>
+                <a href="#contact" class="text-gray-300 hover:text-white">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+<!-- Hero Section -->
+<section class="hero-gradient relative bg-cover bg-center h-screen" style="background-image: url('https://wallpaperaccess.com/full/702858.jpg');">
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-black opacity-75"></div> <!-- Increased opacity for a darker effect -->
+
+    <!-- Content -->
+    <div class="container mx-auto h-full flex flex-col justify-center items-center text-center relative z-10">
+        <!-- Headline -->
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Justice at Your Fingertips</h1>
+
+        <!-- Subheadline -->
+        <p class="text-lg md:text-2xl text-gray-300 mb-8">Access essential legal services and information anytime, anywhere.</p>
+
+        <!-- Call to Action (CTA) Button -->
+        <a href="#services" class="btn-primary pulse-animation">
+            Get Started
+        </a>
+    </div>
+</section>
+
+    <section id="about" class="section-gradient-light py-16">
+        <div class="container mx-auto px-6">
+            <!-- Section Title -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">About Us</h2>
+                <p class="text-gray-400 mt-4">
+                    The Department of Justice (DoJ) is committed to ensuring justice for all. Learn more about our mission, values, and the services we offer.
+                </p>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Image or Graphic -->
+                <div class="flex justify-center">
+                    <img src="path/to/about-image.jpg" alt="About Us" class="rounded-lg shadow-lg max-w-full h-auto">
+                </div>
+
+                <!-- Text Content -->
+                <div class="flex flex-col justify-center">
+                    <h3 class="text-2xl font-semibold mb-4">Our Mission</h3>
+                    <p class="text-gray-300 mb-4">
+                        The Department of Justice works tirelessly to uphold the rule of law, protect citizens' rights, and deliver swift justice. Our commitment is to make legal services accessible to everyone, ensuring that justice is not just a concept but a reality for all.
+                    </p>
+                    <p class="text-gray-300">
+                        With a focus on transparency, efficiency, and integrity, we aim to maintain the highest standards in the legal field. From eFiling and ePay services to live streaming of court cases, we are constantly innovating to serve you better.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Services Section -->
+    <section id="services" class="section-gradient-dark py-16">
+        <div class="container mx-auto px-6">
+            <!-- Section Title -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Our Services</h2>
+                <p class="text-gray-400 mt-4">
+                    Explore the range of services offered by the Department of Justice, designed to make justice more accessible and transparent.
+                </p>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <!-- Service 1 -->
+                <div class="card-gradient glass-effect p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 mb-6">
+                        <i class="fas fa-gavel text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Case Management</h3>
+                    <p class="text-gray-300">
+                        Manage and monitor case progress with our comprehensive case management system. Stay informed about case updates, hearings, and judgments.
+                    </p>
+                    <a href="{{ url_for('live_stream') }}" class="btn-stream mt-4">Start Live Court Streaming</a>
+                </div>
+                 <!-- Service 2 -->
+                 <div class="card-gradient glass-effect p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 mb-6">
+                        <i class="fas fa-balance-scale text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">eFiling & ePay</h3>
+                    <p class="text-gray-300">
+                        File your cases online with ease and make secure payments through our eFiling and ePay services. Simplifying the legal process for you.
+                    </p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="card-gradient glass-effect p-8 rounded-lg shadow-lg service-card">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 mb-6">
+                        <i class="fas fa-video text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Live Court Streaming</h3>
+                    <p class="text-gray-300">
+                        Watch live streaming of court proceedings from the comfort of your home. Stay connected and informed about the justice system.
+                    </p>
+                    <div class="flex justify-center mt-4"> <!-- Centering the button -->
+                        <a href="{{ url_for('live_stream') }}" class="btn-primary gradient-button">Get Started</a> <!-- Get Started button linked to live streaming -->
+                    </div>
+                </div>
+                <!-- Service 4 -->
+                <div class="card-gradient glass-effect p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 mb-6">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Legal Aid Services</h3>
+                    <p class="text-gray-300">
+                        Access free legal aid services through our network of legal experts. Get the assistance you need to navigate the legal system.
+                    </p>
+                    <button id="open-chatroom" class="btn-primary mt-4">Chat with Legal Expert</button>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="card-gradient glass-effect p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 mb-6">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Legal Knowledge Base</h3>
+                    <p class="text-gray-300">
+                        Explore our extensive knowledge base for legal resources, guides, and FAQs. Empower yourself with the right information.
+                    </p>
+                    <a href="/knowledge_base" class="btn-primary mt-4 gradient-button shine-effect animated-button">Visit Knowledge Base</a>
+                </div>
+                 <!-- Service 6 -->
+                 <div class="card-gradient glass-effect p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-600 mb-6">
+                        <i class="fas fa-phone-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">24/7 Helpline</h3>
+                    <p class="text-gray-300">
+                        Contact our 24/7 helpline for immediate assistance and support. We're here to help you with any legal queries or emergencies.
+                    </p>
+                </div>
+            </div>
+           
+        </div>
+    </section>
+     
+<!-- Contact Section -->
+<section id="contact" class="section-gradient-light py-16">
+    <div class="container mx-auto px-6">
+        <!-- Section Title -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold">Get in Touch</h2>
+            <p class="text-gray-400 mt-4">
+                Have questions or need assistance? Reach out to us using any of the following methods.
+            </p>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <span class="contact-text">123 Justice Blvd, Legal City, LC 12345</span>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <span class="contact-text">info@justice.gov.in</span>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <span class="contact-text">+91 123 456 7890</span>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="bg-gray-600 p-6 rounded-lg shadow-lg max-w-sm mx-auto mt-8">
+            <h2 class="text-xl font-semibold mb-4 text-center text-white">Contact Us</h2>
+            <form action="/send-email" method="post" class="space-y-4">
+                <div>
+                    <label for="name" class="block text-gray-300 text-sm">Name:</label>
+                    <input type="text" id="name" name="name" class="w-full p-2 border border-gray-600 rounded bg-gray-900 text-white text-sm" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-300 text-sm">Email:</label>
+                    <input type="email" id="email" name="email" class="w-full p-2 border border-gray-600 rounded bg-gray-900 text-white text-sm" required>
+                </div>
+                <div>
+                    <label for="message" class="block text-gray-300 text-sm">Message:</label>
+                    <textarea id="message" name="message" rows="3" class="w-full p-2 border border-gray-600 rounded bg-gray-900 text-white text-sm" required></textarea>
+                </div>
+                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Send</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+    <!-- Footer Section -->
+   <!-- Footer Section -->
+<footer class="section-gradient-dark py-12">
+    <div class="container mx-auto px-6">
+        <!-- Footer Content -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <!-- Footer Links -->
+            <div class="text-center md:text-left mb-8 md:mb-0">
+                <h4 class="text-xl font-bold mb-4 text-white">Quick Links</h4>
+                <ul class="space-y-2 md:space-y-0 md:flex md:space-x-4">
+                    <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                    <li><a href="#about" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li><a href="#services" class="text-gray-400 hover:text-white">Services</a></li>
+                    <li><a href="#contact" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <!-- Social Media Links -->
+            <div class="text-center mb-8 md:mb-0">
+                <h4 class="text-xl font-bold mb-4 text-white">Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-icon facebook" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-icon twitter" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon linkedin" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-icon instagram" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon youtube" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="text-center">
+            <p class="text-gray-400">&copy; 2024 Department of Justice. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Floating Chatbot Button -->
+<button id="chat-button" class="flex items-center justify-center text-white text-xl font-bold fade-in">
+    Chat
+</button>
+
+<!-- Chat Popup -->
+<div id="chat-popup" class="fixed bottom-4 right-4 bg-gray-900 p-4 rounded-lg shadow-lg fade-in hidden">
+    <!-- Close Button -->
+    <button id="close-button" class="text-white">&times;</button>
+
+    <div id="messages" class="h-64 overflow-y-auto mb-4 fade-in"></div>
+    <form id="chat-form" class="flex fade-in">
+        <input id="message-input" type="text" placeholder="Type a message..." class="flex-grow p-2 border rounded-l-lg border-gray-600 bg-gray-800 text-white">
+        <button type="submit" class="p-2 bg-blue-600 rounded-r-lg hover:bg-blue-700">Send</button>
+        <button type="button" id="voice-button" class="p-2 bg-red-600 rounded-r-lg hover:bg-red-700">🎤</button>
+    </form>
+</div>
+
+<!-- Video Call Interface Modal -->
+<div id="video-call-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden">
+    <div class="bg-gray-900 p-6 rounded-lg shadow-lg max-w-3xl w-full">
+        <h2 class="text-xl font-semibold text-white mb-4">Live Court Streaming</h2>
+        <div id="video-call-container" class="mb-4 flex flex-col">
+            <div class="flex justify-between mb-4">
+                <video id="local-video" autoplay muted class="w-1/2 h-64 rounded-lg border border-gray-600"></video>
+                <video id="remote-video" autoplay class="w-1/2 h-64 rounded-lg border border-gray-600"></video>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="mute-button" class="p-2 bg-red-600 text-white rounded hover:bg-red-700">
+                    Mute
+                </button>
+                <button id="end-call-button" class="p-2 bg-red-600 text-white rounded hover:bg-red-700">
+                    End Call
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chatroom Modal -->
+<div id="chatroom-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 hidden">
+    <div class="bg-gray-900 p-6 rounded-lg shadow-lg max-w-3xl w-full">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-white">Legal Aid Chatroom</h2>
+            <button id="close-chatroom" class="text-white">&times;</button>
+        </div>
+        <div id="chatroom-messages" class="h-64 overflow-y-auto mb-4 bg-gray-800 p-4 rounded-lg"></div>
+        <form id="chatroom-form" class="flex">
+            <input id="chatroom-input" type="text" placeholder="Type your query..." class="flex-grow p-2 border rounded-l-lg border-gray-600 bg-gray-800 text-white">
+            <button type="submit" class="p-2 bg-blue-600 rounded-r-lg hover:bg-blue-700">Send</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Existing chat variables
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const messagesContainer = document.getElementById('messages');
+        const chatButton = document.getElementById('chat-button');
+        const chatPopup = document.getElementById('chat-popup');
+        const closeButton = document.getElementById('close-button');
+        const voiceButton = document.getElementById('voice-button');
+
+        // Speech recognition setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        let isListening = false;
+
+        // Voice button click handler
+        voiceButton.addEventListener('click', () => {
+            if (!isListening) {
+                // Start listening
+                recognition.start();
+                isListening = true;
+                voiceButton.style.backgroundColor = '#c53030'; // Red while listening
+                voiceButton.innerHTML = '⏺'; // Recording symbol
+            } else {
+                // Stop listening
+                recognition.stop();
+                isListening = false;
+                voiceButton.style.backgroundColor = ''; // Reset color
+                voiceButton.innerHTML = '🎤'; // Microphone symbol
+            }
+        });
+
+        // Handle speech recognition results
+        recognition.onresult = (event) => {
+            let finalTranscript = '';
+            let interimTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript;
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+
+            // Update input field with transcribed text
+            if (finalTranscript !== '') {
+                messageInput.value = finalTranscript;
+            }
+        };
+
+        // Handle speech recognition errors
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            appendMessage('bot', 'Speech recognition error. Please try again.');
+            isListening = false;
+            voiceButton.style.backgroundColor = ''; // Reset color
+            voiceButton.innerHTML = '🎤'; // Reset to microphone icon
+        };
+
+        // Handle when speech recognition ends
+        recognition.onend = () => {
+            if (isListening) {
+                // Restart recognition if it was still supposed to be listening
+                recognition.start();
+            }
+        };
+
+        // Existing chat form submission handler
+        async function handleMessageSubmission(e) {
+            e.preventDefault();
+            const userMessage = messageInput.value.trim();
+            
+            if (userMessage) {
+                appendMessage('user', userMessage);
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: userMessage })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        appendMessage('bot', data.response);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    appendMessage('bot', 'Sorry, there was an error processing your message.');
+                }
+
+                messageInput.value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        function appendMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            messagesContainer.appendChild(messageDiv);
+        }
+
+        // Event Listeners
+        chatForm.addEventListener('submit', handleMessageSubmission);
+        
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmission(e);
+            }
+        });
+
+        chatButton.addEventListener('click', () => chatPopup.classList.toggle('hidden'));
+        closeButton.addEventListener('click', () => chatPopup.classList.add('hidden'));
+    });
+</script>
+
+
+
+<script>
+    //mail javascript
+    const chatForm = document.getElementById('chat-form');
+const messageInput = document.getElementById('message-input');
+const messagesContainer = document.getElementById('messages-container');
+
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const userMessage = messageInput.value.trim();
+    if (userMessage) {
+        // Append user message to the chat window
+        const userMessageElement = document.createElement('div');
+        userMessageElement.className = 'message user';
+        userMessageElement.textContent = userMessage;
+        messagesContainer.appendChild(userMessageElement);
+
+        // Get response from Flask backend
+        try {
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+            const botMessageElement = document.createElement('div');
+            botMessageElement.className = 'message bot';
+            botMessageElement.textContent = data.response;
+            messagesContainer.appendChild(botMessageElement);
+        } catch (error) {
+            console.error('Error fetching response:', error);
+        }
+
+        // Clear input
+        messageInput.value = '';
+        // Ensure the last message is visible
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+});
+
+</script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- Add this script to handle scroll animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceCards = document.querySelectorAll('.card-gradient');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible'); // Reset animation when out of view
+                    }
+                });
+            });
+
+            serviceCards.forEach(card => {
+                card.classList.add('scale-up'); // Add scale-up class initially
+                observer.observe(card); // Observe each card
+            });
+        });
+    </script>
+
+<script>
+    // Add this script to handle scroll animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceCards = document.querySelectorAll('.card-gradient');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible'); // Reset animation when out of view
+                }
+            });
+        });
+
+        serviceCards.forEach(card => {
+            card.classList.add('scale-up'); // Add scale-up class initially
+            observer.observe(card); // Observe each card
+        });
+    });
+</script>
+<script>
+    // Add this script to handle hover effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceCards = document.querySelectorAll('.card-gradient');
+
+        serviceCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                serviceCards.forEach(otherCard => {
+                    if (otherCard !== card) {
+                        otherCard.classList.add('fade'); // Fade out other cards
+                    }
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                serviceCards.forEach(otherCard => {
+                    otherCard.classList.remove('fade'); // Remove fade effect when not hovering
+                });
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const openChatroomButton = document.getElementById('open-chatroom');
+        const chatroomModal = document.getElementById('chatroom-modal');
+        const closeChatroomButton = document.getElementById('close-chatroom');
+        const chatroomForm = document.getElementById('chatroom-form');
+        const chatroomInput = document.getElementById('chatroom-input');
+        const chatroomMessages = document.getElementById('chatroom-messages');
+
+        // Open chatroom modal
+        openChatroomButton.addEventListener('click', () => {
+            chatroomModal.classList.remove('hidden');
+        });
+
+        // Close chatroom modal
+        closeChatroomButton.addEventListener('click', () => {
+            chatroomModal.classList.add('hidden');
+        });
+
+        // Handle chatroom form submission
+        chatroomForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userQuery = chatroomInput.value.trim();
+            if (userQuery) {
+                appendChatMessage('user', userQuery);
+                chatroomInput.value = '';
+
+                // Simulate a response from a legal expert
+                setTimeout(() => {
+                    appendChatMessage('expert', 'Thank you for your query. Our legal expert will respond shortly.');
+                }, 1000);
+            }
+        });
+
+        function appendChatMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type} p-2 mb-2 rounded-lg ${type === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'}`;
+            messageDiv.textContent = text;
+            chatroomMessages.appendChild(messageDiv);
+            chatroomMessages.scrollTop = chatroomMessages.scrollHeight;
+        }
+    });
+</script>
+
+</body>
+
+</html>

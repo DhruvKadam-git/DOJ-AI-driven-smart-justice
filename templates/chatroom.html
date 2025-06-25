@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Aid Chatroom</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            position: relative;
+        }
+        .message.user {
+            background: #3182ce;
+            color: white;
+            margin-left: auto;
+        }
+        .message.expert {
+            background: #2d3748;
+            color: white;
+            margin-right: auto;
+        }
+        #connect-button {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #3182ce;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-3xl w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">Legal Aid Chatroom</h2>
+                <a href="index.html" class="text-white">&times;</a>
+            </div>
+            <div id="chatroom-messages" class="h-64 overflow-y-auto mb-4 bg-gray-700 p-4 rounded-lg"></div>
+            <form id="chatroom-form" class="flex">
+                <input id="chatroom-input" type="text" placeholder="Type your query..." class="flex-grow p-2 border rounded-l-lg border-gray-600 bg-gray-800 text-white">
+                <button type="submit" class="p-2 bg-blue-600 rounded-r-lg hover:bg-blue-700">Send</button>
+            </form>
+            <div id="connect-button" onclick="redirectToPrivateChat()">Connect with Legal Expert</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatroomForm = document.getElementById('chatroom-form');
+            const chatroomInput = document.getElementById('chatroom-input');
+            const chatroomMessages = document.getElementById('chatroom-messages');
+            const connectButton = document.getElementById('connect-button');
+
+            chatroomForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const userQuery = chatroomInput.value.trim();
+                if (userQuery) {
+                    appendChatMessage('user', userQuery);
+                    chatroomInput.value = '';
+
+                    setTimeout(() => {
+                        appendChatMessage('expert', 'Thank you for your query. Our legal expert will respond shortly.');
+                        connectButton.style.display = 'block'; // Show the connect button
+                    }, 1000);
+                }
+            });
+
+            function appendChatMessage(type, text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                messageDiv.textContent = text;
+                chatroomMessages.appendChild(messageDiv);
+                chatroomMessages.scrollTop = chatroomMessages.scrollHeight;
+            }
+
+            window.redirectToPrivateChat = function() {
+                // Redirect to a private chat interface
+                window.location.href = 'private_chat_interface.html';
+            };
+        });
+    </script>
+</body>
+</html>

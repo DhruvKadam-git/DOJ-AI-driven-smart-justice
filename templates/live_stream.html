@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Test</title>
+    <style>
+        /* Basic styling for the video call interface */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #000;
+        }
+        video {
+            width: 45%;
+            border: 2px solid #fff;
+            border-radius: 8px;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="local-video" autoplay playsinline></video>
+    <video id="remote-video" autoplay playsinline></video>
+
+    <div class="controls">
+        <button id="mute-button">Mute</button>
+        <button id="end-call-button">End Call</button>
+    </div>
+
+    <script>
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: true 
+                });
+                document.getElementById('local-video').srcObject = stream;
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        }
+
+        startCamera();
+
+        // Mute/Unmute functionality
+        document.getElementById('mute-button').addEventListener('click', function() {
+            const localVideo = document.getElementById('local-video');
+            const isMuted = localVideo.muted;
+            localVideo.muted = !isMuted; // Toggle mute state
+            this.textContent = isMuted ? 'Unmute' : 'Mute'; // Update button text
+        });
+
+        // End call functionality
+        document.getElementById('end-call-button').addEventListener('click', function() {
+            // Logic to end the call (e.g., close the video stream)
+            const localVideo = document.getElementById('local-video');
+            const remoteVideo = document.getElementById('remote-video');
+            localVideo.srcObject.getTracks().forEach(track => track.stop()); // Stop local video
+            localVideo.srcObject = null; // Clear local video
+            remoteVideo.srcObject = null; // Clear remote video
+            alert('Call ended'); // Notify user
+        });
+    </script>
+</body>
+
+</html>

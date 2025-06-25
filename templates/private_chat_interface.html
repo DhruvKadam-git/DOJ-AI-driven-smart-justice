@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat with Legal Expert</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for the private chat interface */
+        body {
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-top: 20px;
+            padding-right: 10px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 70%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .message.user {
+            background-color: #3182ce;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message.expert {
+            background-color: #e2e8f0;
+            color: #2d3748;
+            align-self: flex-start;
+        }
+        .message.error {
+            background-color: #fed7d7;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+        .message.warning {
+            background-color: #fef5e7;
+            color: #d69e2e;
+            border: 1px solid #fbd38d;
+        }
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .send-button {
+            padding: 10px 20px;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .send-button:hover {
+            background-color: #2b6cb0;
+        }
+        .send-button:disabled {
+            background-color: #a0aec0;
+            cursor: not-allowed;
+        }
+        .rate-limit-status {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            color: #4a5568;
+        }
+        .rate-limit-status.warning {
+            background-color: #fef5e7;
+            border-color: #fbd38d;
+            color: #d69e2e;
+        }
+        .rate-limit-status.error {
+            background-color: #fed7d7;
+            border-color: #feb2b2;
+            color: #c53030;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3182ce;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2 class="text-xl font-semibold">Chat with Your Legal Expert</h2>
+            <div class="flex items-center space-x-4">
+                <div id="rate-limit-status" class="rate-limit-status">
+                    Loading...
+                </div>
+                <a href="/" class="text-blue-600">End Chat</a>
+            </div>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <!-- Messages will be appended here -->
+        </div>
+        <div class="chat-input-container">
+            <input id="chat-input" type="text" placeholder="Type your message..." class="chat-input">
+            <button id="send-button" class="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-messages');
+            const sendButton = document.getElementById('send-button');
+            const rateLimitStatus = document.getElementById('rate-limit-status');
+
+            let isRateLimited = false;
+            let retryAfter = 0;
+
+            // Initialize rate limit status
+            updateRateLimitStatus();
+
+            // Update rate limit status every 10 seconds
+            setInterval(updateRateLimitStatus, 10000);
+
+            // Handle sending messages
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            async function updateRateLimitStatus() {
+                try {
+                    const response = await fetch('/rate-limit-status');
+                    const data = await response.json();
+                    
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    if (data.rate_limited) {
+                        statusClass = 'error';
+                        statusText = `Rate limited. Reset in ${Math.ceil(data.time_until_reset)}s`;
+                        isRateLimited = true;
+                        retryAfter = data.time_until_reset;
+                    } else if (data.remaining_requests <= 2) {
+                        statusClass = 'warning';
+                        statusText = `${data.remaining_requests} requests left`;
+                        isRateLimited = false;
+                    } else {
+                        statusClass = '';
+                        statusText = `${data.remaining_requests} requests available`;
+                        isRateLimited = false;
+                    }
+                    
+                    rateLimitStatus.className = `rate-limit-status ${statusClass}`;
+                    rateLimitStatus.textContent = statusText;
+                    
+                    // Update button state
+                    sendButton.disabled = isRateLimited;
+                    
+                } catch (error) {
+                    console.error('Error updating rate limit status:', error);
+                    rateLimitStatus.textContent = 'Status unavailable';
+                }
+            }
+
+            async function sendMessage() {
+                const userMessage = chatInput.value.trim();
+                if (!userMessage || isRateLimited) return;
+
+                // Add user message
+                appendMessage('user', userMessage);
+                chatInput.value = '';
+                
+                // Disable input and show loading
+                sendButton.disabled = true;
+                sendButton.innerHTML = '<span class="loading"></span>';
+                chatInput.disabled = true;
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: userMessage })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.rate_limited) {
+                        appendMessage('warning', data.response);
+                        isRateLimited = true;
+                        retryAfter = data.retry_after || 60;
+                        
+                        // Update status immediately
+                        updateRateLimitStatus();
+                        
+                        // Enable retry after delay
+                        setTimeout(() => {
+                            isRateLimited = false;
+                            sendButton.disabled = false;
+                            chatInput.disabled = false;
+                            updateRateLimitStatus();
+                        }, retryAfter * 1000);
+                        
+                    } else if (data.error) {
+                        appendMessage('error', data.response);
+                    } else {
+                        appendMessage('expert', data.response);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    appendMessage('error', 'Sorry, there was an error connecting to the service. Please try again.');
+                } finally {
+                    // Re-enable input
+                    sendButton.disabled = isRateLimited;
+                    sendButton.textContent = 'Send';
+                    chatInput.disabled = false;
+                    chatInput.focus();
+                }
+            }
+
+            function appendMessage(type, text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Add welcome message
+            appendMessage('expert', 'Hello! I\'m your legal assistant. How can I help you today? Please note that I have rate limits, so I may occasionally ask you to wait a moment between requests.');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Knowledge Base</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Add any additional styles here */
+        #toggle-theme {
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        #toggle-theme:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Switch settings */
+        .ui-switch {
+            --switch-bg: rgb(135, 150, 165);
+            --switch-width: 48px;
+            --switch-height: 20px;
+            --circle-diameter: 32px;
+            --circle-bg: rgb(232, 89, 15);
+            --circle-inset: calc((var(--circle-diameter) - var(--switch-height)) / 2);
+        }
+
+        .ui-switch input {
+            display: none;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: var(--switch-width);
+            height: var(--switch-height);
+            background: var(--switch-bg);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .slider .circle {
+            top: calc(var(--circle-inset) * -1);
+            left: 0;
+            width: var(--circle-diameter);
+            height: var(--circle-diameter);
+            position: absolute;
+            background: var(--circle-bg);
+            border-radius: inherit;
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj4KICAgIDxwYXRoIGZpbGw9IiNmZmYiCiAgICAgICAgZD0iTTkuMzA1IDEuNjY3VjMuNzVoMS4zODlWMS42NjdoLTEuMzl6bS00LjcwNyAxLjk1bC0uOTgyLjk4Mkw1LjA5IDYuMDcybC45ODItLjk4Mi0xLjQ3My0xLjQ3M3ptMTAuODAyIDBMMTMuOTI3IDUuMDlsLjk4Mi45ODIgMS40NzMtMS40NzMtLjk4Mi0uOTgyek0xMCA1LjEzOWE0Ljg3MiA0Ljg3MiAwIDAwLTQuODYyIDQuODZBNC44NzIgNC44NzIgMCAwMDEwIDE0Ljg2MiA0Ljg3MiA0Ljg3MiAwIDAwMTQuODYgMTAgNC44NzIgNC44NzIgMCAwMDEwIDUuMTM5em0wIDEuMzg5QTMuNDYyIDMuNDYyIDAgMDExMy40NzEgMTBhMy40NjIgMy40NjIgMCAwMS0zLjQ3MyAzLjQ3MkEzLjQ2MiAzLjQ2MiAwIDAxNi41MjcgMTAgMy40NjIgMy40NjIgMCAwMTEwIDYuNTI4ek0xLjY2NSA5LjMwNXYxLjM5aDIuMDgzdi0xLjM5SDEuNjY2em0xNC41ODMgMHYxLjM5aDIuMDg0di0xLjM5aC0yLjA4NHpNNS4wOSAxMy45MjhMMy42MTYgMTUuNGwuOTgyLjk4MiAxLjQ3My0xLjQ3My0uOTgyLS45ODJ6bTkuODIgMGwtLjk4Mi45ODIgMS40NzMgMS40NzMuOTgyLS45ODItMS40NzMtMS40NzN6TTkuMzA1IDE2LjI1djIuMDgzaDEuMzg5VjE2LjI1aC0xLjM5eiIgLz4KPC9zdmc+");
+            background-repeat: no-repeat;
+            background-position: center center;
+            transition: left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+        }
+
+        .slider .circle::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: inherit;
+            transition: all 500ms;
+            opacity: 0;
+        }
+
+        /* Actions */
+        .ui-switch input:checked + .slider .circle {
+            left: calc(100% - var(--circle-diameter));
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj4KICAgIDxwYXRoIGZpbGw9IiNmZmYiCiAgICAgICAgZD0iTTQuMiAyLjVsLS43IDEuOC0xLjguNyAxLjguNy43IDEuOC42LTEuOEw2LjcgNWwtMS45LS43LS42LTEuOHptMTUgOC4zYTYuNyA2LjcgMCAxMS02LjYtNi42IDUuOCA1LjggMCAwMDYuNiA2LjZ6IiAvPgo8L3N2Zz4=");
+            background-color: rgb(0, 56, 146);
+        }
+
+        .ui-switch input:active + .slider .circle::before {
+            transition: 0s;
+            opacity: 1;
+            width: 0;
+            height: 0;
+        }
+
+        /* Card Gradient and Animation */
+        .card-gradient {
+            background: var(--card-gradient-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-gradient:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        /* Light Mode Styles */
+        body.bg-white .card-gradient {
+            background: var(--card-gradient-light);
+        }
+
+        /* CSS Variables for Gradients */
+        :root {
+            --card-gradient-dark: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            --card-gradient-light: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%);
+        }
+
+        .slider .circle i {
+            display: none; /* Hide icons by default */
+        }
+
+        .ui-switch input:checked + .slider .circle i {
+            display: block; /* Show sun icon in light mode */
+        }
+
+        .ui-switch input:not(:checked) + .slider .circle i {
+            display: block; /* Show moon icon in dark mode */
+        }
+
+        /* Text Color for Dark and Light Modes */
+        .text-gray-300 {
+            color: #e2e8f0; /* Light text for dark mode */
+        }
+
+        body.bg-white .text-gray-300 {
+            color: #4a5568; /* Dark text for light mode */
+        }
+
+        /* Add the new card styles */
+        .ag-courses_item {
+            margin: auto;
+            overflow: hidden;
+            border-radius: 28px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ag-courses-item_link {
+            display: block;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            overflow: hidden;
+            position: relative;
+            text-decoration: none;
+            transition: background 0.5s ease;
+        }
+
+        .ag-courses-item_link:hover {
+            background: linear-gradient(135deg, #00796b 0%, #00bcd4 100%);
+        }
+
+        .ag-courses-item_link:hover .ag-courses-item_bg {
+            transform: scale(20);
+        }
+
+        .ag-courses-item_title {
+            min-height: 57px;
+            margin: 0 0 30px;
+            overflow: hidden;
+            font-weight: bold;
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            z-index: 2;
+            position: relative;
+        }
+
+        .ag-courses-item_date-box {
+            font-size: 18px;
+            color: #fff;
+            z-index: 2;
+            position: relative;
+        }
+
+        .ag-courses-item_date {
+            font-weight: bold;
+            color: #00bcd4;
+            transition: color 0.5s ease;
+        }
+
+        .ag-courses-item_bg {
+            height: 130px;
+            width: 100px;
+            background-color: #00796b;
+            z-index: 1;
+            position: absolute;
+            top: -75px;
+            right: -75px;
+            border-radius: 50%;
+            transition: transform 1s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Knowledge Base Section -->
+    <section id="knowledge-base" class="section-gradient-light py-16">
+        <div class="container mx-auto px-6">
+            <!-- Section Title -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Legal Knowledge Base</h2>
+                <p class="text-gray-400 mt-4">
+                    Explore various legal domains and resources.
+                </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="mb-8 flex justify-center">
+                <form class="form relative flex items-center" id="search-form">
+                    <button type="button" class="absolute left-3 top-1/2 transform -translate-y-1/2 p-1">
+                        <svg
+                            width="17"
+                            height="16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            role="img"
+                            aria-labelledby="search"
+                            class="w-5 h-5 text-gray-700"
+                        >
+                            <path
+                                d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9"
+                                stroke="currentColor"
+                                stroke-width="1.333"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></path>
+                        </svg>
+                    </button>
+                    <input
+                        id="search-input"
+                        class="input rounded-full px-12 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md w-80 text-gray-900 bg-white dark:text-white dark:bg-gray-800"
+                        placeholder="Search..."
+                        required=""
+                        type="text"
+                    />
+                    <button type="reset" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 text-gray-700"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                            ></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Dark/Light Mode Toggle -->
+            <div class="absolute top-4 right-4">
+                <label class="ui-switch">
+                    <input type="checkbox" id="toggle-theme">
+                    <div class="slider">
+                        <div class="circle flex items-center justify-center">
+                            <i id="theme-icon" class="fas fa-moon text-gray-800"></i>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Cards for Different Domains -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12" id="domain-cards">
+                <!-- Domain Card 1 -->
+                <div class="ag-courses_item">
+                    <a class="ag-courses-item_link" href="#">
+                        <div class="ag-courses-item_bg"></div>
+                        <div class="ag-courses-item_title">Family Law</div>
+                        <div class="ag-courses-item_date-box">
+                            Resources and information related to family law, including divorce, custody, and adoption.
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Domain Card 2 -->
+                <div class="ag-courses_item">
+                    <a class="ag-courses-item_link" href="#">
+                        <div class="ag-courses-item_bg"></div>
+                        <div class="ag-courses-item_title">Criminal Law</div>
+                        <div class="ag-courses-item_date-box">
+                            Information on criminal law, including defense strategies and rights of the accused.
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Domain Card 3 -->
+                <div class="ag-courses_item">
+                    <a class="ag-courses-item_link" href="#">
+                        <div class="ag-courses-item_bg"></div>
+                        <div class="ag-courses-item_title">Corporate Law</div>
+                        <div class="ag-courses-item_date-box">
+                            Insights into corporate law, including business formation, compliance, and contracts.
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Dark/Light Mode Toggle Functionality
+        const toggleTheme = document.getElementById('toggle-theme');
+        const body = document.body;
+
+        // Check the current theme on page load
+        if (body.classList.contains('bg-gray-900')) {
+            toggleTheme.checked = true; // Set toggle to checked if in dark mode
+        }
+
+        toggleTheme.addEventListener('change', function() {
+            body.classList.toggle('bg-gray-900');
+            body.classList.toggle('bg-white');
+            body.classList.toggle('text-white');
+            body.classList.toggle('text-black');
+
+            // Update the toggle state based on the current theme
+            if (body.classList.contains('bg-gray-900')) {
+                toggleTheme.checked = true; // Dark mode is active
+                document.getElementById('theme-icon').classList.remove('fa-sun');
+                document.getElementById('theme-icon').classList.add('fa-moon');
+            } else {
+                toggleTheme.checked = false; // Light mode is active
+                document.getElementById('theme-icon').classList.remove('fa-moon');
+                document.getElementById('theme-icon').classList.add('fa-sun');
+            }
+        });
+
+        // Enhanced Search Functionality
+        document.getElementById('search-input').addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#domain-cards > .ag-courses_item');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.ag-courses-item_title').textContent.toLowerCase();
+                const description = card.querySelector('.ag-courses-item_date-box').textContent.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    card.style.display = ''; // Show card
+                } else {
+                    card.style.display = 'none'; // Hide card
+                }
+            });
+        });
+
+        // Fetch knowledge base entries from the server
+        fetch('/api/knowledge_base')
+            .then(response => response.json())
+            .then(data => {
+                const domainCards = document.getElementById('domain-cards');
+                data.forEach(entry => {
+                    const card = document.createElement('div');
+                    card.className = 'ag-courses_item';
+                    card.innerHTML = `
+                        <a class="ag-courses-item_link" href="#">
+                            <div class="ag-courses-item_bg"></div>
+                            <div class="ag-courses-item_title">${entry.title}</div>
+                            <div class="ag-courses-item_date-box">${entry.description}</div>
+                        </a>
+                    `;
+                    domainCards.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error fetching knowledge base:', error));
+    </script>
+</body>
+</html> 

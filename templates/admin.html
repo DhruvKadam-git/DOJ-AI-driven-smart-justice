@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel Sidebar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styling for sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2D3748; /* Dark Gray */
+    min-height: 100vh; /* Full height */
+}
+
+.sidebar a {
+    color: #A0AEC0; /* Light Gray */
+    display: block; /* Make links block-level for better click area */
+    padding: 0.5rem 1rem; /* Add padding */
+    border-radius: 0.375rem; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.sidebar a:hover {
+    background-color: #4A5568; /* Hover background */
+    color: #FFFFFF; /* White text */
+}
+
+.active-link {
+    background-color: #4A5568; /* Active link background */
+    color: #FFFFFF; /* Active link text */
+}
+
+/* Custom card styling */
+.card {
+    background-color: #1F2937; /* Dark background for cards */
+    color: #FFFFFF; /* White text */
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Custom button styling */
+.button {
+    background-color: #2563EB; /* Blue */
+    color: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+    text-align: center; /* Center text */
+    display: inline-block; /* Ensure buttons align properly */
+    font-size: 1rem; /* Consistent font size */
+    cursor: pointer; /* Pointer cursor for buttons */
+}
+
+.button:hover {
+    background-color: #1D4ED8; /* Darker blue */
+}
+
+.button-danger {
+    background-color: #DC2626; /* Red */
+    color: #FFFFFF;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+    text-align: center; /* Center text */
+    display: inline-block; /* Ensure buttons align properly */
+    font-size: 1rem; /* Consistent font size */
+    cursor: pointer; /* Pointer cursor for buttons */
+}
+
+.button-danger:hover {
+    background-color: #B91C1C; /* Darker red */
+}
+/* Custom styling for Admin Settings Section */
+.bg-white {
+    background-color: #FFFFFF; /* White background */
+}
+
+.shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.rounded-lg {
+    border-radius: 0.5rem; /* Large rounded corners */
+}
+
+.p-6 {
+    padding: 1.5rem; /* Padding */
+}
+
+.text-gray-900 {
+    color: #1A202C; /* Dark Gray */
+}
+
+.text-gray-800 {
+    color: #2D3748; /* Medium Dark Gray */
+}
+
+.text-gray-700 {
+    color: #4A5568; /* Dark Gray */
+}
+
+.text-gray-100 {
+    color: #F7FAFC; /* Light Gray */
+}
+
+.bg-gray-100 {
+    background-color: #F7FAFC; /* Light Gray background */
+}
+
+.border {
+    border-width: 1px; /* Border width */
+}
+
+.border-gray-300 {
+    border-color: #E2E8F0; /* Light Gray border */
+}
+
+.bg-blue-600 {
+    background-color: #2563EB; /* Blue background */
+}
+
+.bg-blue-700 {
+    background-color: #1D4ED8; /* Darker blue */
+}
+
+.bg-green-600 {
+    background-color: #10B981; /* Green background */
+}
+
+.bg-green-700 {
+    background-color: #059669; /* Darker green */
+}
+
+.bg-yellow-600 {
+    background-color: #F59E0B; /* Yellow background */
+}
+
+.bg-yellow-700 {
+    background-color: #D97706; /* Darker yellow */
+}
+
+.text-white {
+    color: #FFFFFF; /* White text */
+}
+
+.hover\:bg-blue-700:hover {
+    background-color: #1D4ED8; /* Darker blue on hover */
+}
+
+.hover\:bg-green-700:hover {
+    background-color: #059669; /* Darker green on hover */
+}
+
+.hover\:bg-yellow-700:hover {
+    background-color: #D97706; /* Darker yellow on hover */
+}
+
+.py-2 {
+    padding-top: 0.5rem; /* Padding top */
+    padding-bottom: 0.5rem; /* Padding bottom */
+}
+
+.px-4 {
+    padding-left: 1rem; /* Padding left */
+    padding-right: 1rem; /* Padding right */
+}
+
+.mb-4 {
+    margin-bottom: 1rem; /* Margin bottom */
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem; /* Margin bottom */
+}
+
+.text-lg {
+    font-size: 1.125rem; /* Large text */
+}
+
+.font-semibold {
+    font-weight: 600; /* Semibold font weight */
+}
+
+.font-medium {
+    font-weight: 500; /* Medium font weight */
+}
+
+.flex {
+    display: flex; /* Flexbox layout */
+}
+
+.justify-between {
+    justify-content: space-between; /* Space between items */
+}
+ </style>
+</head>
+<body class="flex">
+    <!-- Sidebar -->
+    <div class="sidebar flex flex-col">
+        <div class="text-white text-2xl font-semibold p-4">
+            Admin Panel
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex flex-col p-4 space-y-4">
+            <a href="/dashboard" id="dashboard-link" class="p-2 rounded">Dashboard</a>
+            <a href="/video-calls" id="video-calls-link" class="p-2 rounded">Video Call Sessions</a>
+            <a href="/chat-rooms" id="chat-rooms-link" class="p-2 rounded">Chat Room Management</a>
+            <a href="/appointments" id="appointments-link" class="p-2 rounded">Appointment Scheduling</a>
+        </nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 bg-gray-100 p-6">
+        <!-- Placeholder content -->
+        <h1 class="text-3xl font-semibold mb-4">Welcome to the Admin Panel</h1>
+        <p class="text-gray-700">Manage your video calls, chat rooms, and appointments here.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the current page URL
+            const currentUrl = window.location.pathname;
+
+            // Function to set the active link
+            const setActiveLink = () => {
+                const links = document.querySelectorAll('.sidebar a');
+                links.forEach(link => {
+                    if (link.getAttribute('href') === currentUrl) {
+                        link.classList.add('active-link');
+                    } else {
+                        link.classList.remove('active-link');
+                    }
+                });
+            };
+
+            setActiveLink();
+        });
+    </script>
+
+            <!-- Main Dashboard Area -->
+            <div class="flex-1 p-10">
+                <h1 class="text-3xl font-bold mb-8">Admin Dashboard Overview</h1>
+    
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1: Video Call Stats -->
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Video Call Sessions</h3>
+                                <p class="mt-1 text-xl font-semibold text-gray-700">15 Active Calls</p>
+                            </div>
+                            <div class="bg-blue-500 p-4 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-4.553a1.5 1.5 0 112.121 2.121L17.121 12.243a1.5 1.5 0 01-2.121 0L11 8.243M12 19v-7m0 0H5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Card 2: Chat Room Stats -->
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Chat Rooms</h3>
+                                <p class="mt-1 text-xl font-semibold text-gray-700">20 Active Chats</p>
+                            </div>
+                            <div class="bg-green-500 p-4 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h8M8 14h4m-6 4h12a1 1 0 001-1v-9a1 1 0 00-1-1H4a1 1 0 00-1 1v9a1 1 0 001 1z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Card 3: Appointment Stats -->
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Appointments</h3>
+                                <p class="mt-1 text-xl font-semibold text-gray-700">5 Pending Requests</p>
+                            </div>
+                            <div class="bg-red-500 p-4 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3 4V8" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Additional sections for detailed stats or controls -->
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Manage Video Calls</h3>
+                        <p class="mt-2 text-gray-500">Control, view, and manage ongoing video call sessions.</p>
+                        <button class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Manage</button>
+                    </div>
+    
+                    <div class="bg-white shadow rounded-lg p-6">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Manage Appointments</h3>
+                        <p class="mt-2 text-gray-500">View and schedule upcoming appointments.</p>
+                        <button class="mt-4 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">Schedule</button>
+                    </div>
+                </div>
+    <!-- Video Call Sessions Management Section -->
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Video Call Sessions Management</h1>
+        
+        <!-- Current Sessions -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Current Sessions</h2>
+            <div class="space-y-4">
+                <!-- Session Card 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Session with John Doe</h3>
+                            <p class="mt-1">Participants: 4 | Duration: 30 mins</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="button">Join</button>
+                            <button class="button bg-green-500 hover:bg-green-600">Mute</button>
+                            <button class="button bg-red-500 hover:bg-red-600">End</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more session cards as needed -->
+            </div>
+        </div>
+
+        <!-- Scheduled Sessions -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Scheduled Sessions</h2>
+            <div class="space-y-4">
+                <!-- Scheduled Session Card 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Meeting with Team A</h3>
+                            <p class="mt-1">Date: 2024-09-20 | Time: 2:00 PM</p>
+                        </div>
+                        <button class="button">Manage</button>
+                    </div>
+                </div>
+                <!-- Add more scheduled session cards as needed -->
+            </div>
+        </div>
+    </div>            
+    <!-- Chat Room Management Section -->
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Chat Room Management</h1>
+        
+        <!-- Active Chat Rooms -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Active Chat Rooms</h2>
+            <div class="space-y-4">
+                <!-- Chat Room Card 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Room with Team X</h3>
+                            <p class="mt-1">Participants: 8</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="button">View</button>
+                            <button class="button-danger">Ban User</button>
+                            <button class="button-danger">Close Room</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more chat room cards as needed -->
+            </div>
+        </div>
+
+        <!-- Chat Room Logs (optional) -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Chat Room Logs</h2>
+            <div class="space-y-4">
+                <!-- Log Entry 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Room with Team Y</h3>
+                            <p class="mt-1">Last Activity: 2024-09-15 10:30 AM</p>
+                        </div>
+                        <button class="button">View Logs</button>
+                    </div>
+                </div>
+                <!-- Add more log entries as needed -->
+            </div>
+        </div>
+    </div>
+    <!-- Appointment Scheduling Section -->
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Appointment Scheduling</h1>
+        
+        <!-- Pending Appointments -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Pending Appointments</h2>
+            <div class="space-y-4">
+                <!-- Appointment Card 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Meeting with Jane Doe</h3>
+                            <p class="mt-1">Requested: 2024-09-15 | Time: 3:00 PM</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="button">Approve</button>
+                            <button class="button-danger">Decline</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more pending appointment cards as needed -->
+            </div>
+        </div>
+
+        <!-- Approved Appointments -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Approved Appointments</h2>
+            <div class="space-y-4">
+                <!-- Appointment Card 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Consultation with Mark Smith</h3>
+                            <p class="mt-1">Date: 2024-09-18 | Time: 11:00 AM</p>
+                        </div>
+                        <button class="button">View Details</button>
+                    </div>
+                </div>
+                <!-- Add more approved appointment cards as needed -->
+            </div>
+        </div>
+
+        <!-- Completed Appointments -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Completed Appointments</h2>
+            <div class="space-y-4">
+                <!-- Appointment Card 1 -->
+                <div class="card p-4 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium">Follow-up with Anna Brown</h3>
+                            <p class="mt-1">Completed: 2024-09-12 | Time: 2:00 PM</p>
+                        </div>
+                        <button class="button">View Details</button>
+                    </div>
+                </div>
+                <!-- Add more completed appointment cards as needed -->
+            </div>
+        </div>
+    </div>
+    <!-- Notification Panel Section -->
+<div class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Notifications</h3>
+    <div class="space-y-4">
+        <!-- Info Notification -->
+        <div class="flex items-center p-4 bg-blue-100 border border-blue-200 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h1v4zm0-6h-1V7h1v3z" />
+            </svg>
+            <div class="flex-1">
+                <p class="text-blue-800">New video call request received.</p>
+            </div>
+            <button class="text-blue-600 hover:text-blue-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Warning Notification -->
+        <div class="flex items-center p-4 bg-yellow-100 border border-yellow-200 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M4.293 4.293a1 1 0 011.414 0L12 9.586l6.293-6.293a1 1 0 111.414 1.414L13.414 12l6.293 6.293a1 1 0 01-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 01-1.414-1.414L10.586 12 4.293 5.707a1 1 0 010-1.414z" />
+            </svg>
+            <div class="flex-1">
+                <p class="text-yellow-800">Chat room has exceeded participant limit.</p>
+            </div>
+            <button class="text-yellow-600 hover:text-yellow-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Error Notification -->
+        <div class="flex items-center p-4 bg-red-100 border border-red-200 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M6 6l12 12M6 18l12-12" />
+            </svg>
+            <div class="flex-1">
+                <p class="text-red-800">Appointment request pending approval.</p>
+            </div>
+            <button class="text-red-600 hover:text-red-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Clear All Button -->
+    <div class="mt-6 text-right">
+        <button class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300">Clear All</button>
+    </div>
+</div>
+<!-- Admin Settings Section -->
+<div class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-6">Admin Settings</h3>
+    
+    <!-- User Roles -->
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">User Roles</h4>
+        <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <p class="text-gray-700">Define user roles and permissions for various actions.</p>
+                </div>
+                <button class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Manage Roles</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Permissions -->
+    <div class="mb-6">
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">Access Permissions</h4>
+        <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <p class="text-gray-700">Manage access to sensitive information or features.</p>
+                </div>
+                <button class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">Manage Permissions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Settings -->
+    <div>
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">System Settings</h4>
+        <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <p class="text-gray-700">Configure general settings for the admin panel.</p>
+                </div>
+                <button class="bg-yellow-600 text-white py-2 px-4 rounded hover:bg-yellow-700">Configure Settings</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
